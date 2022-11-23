@@ -20,7 +20,8 @@ p {
 }
 
 #app {
-  margin: 50px;
+  margin: auto;
+  margin-top: 20px;
 }
 
 ul {
@@ -128,15 +129,46 @@ li.strike {
   color: antiquewhite;
 }
 
+.name {
+  width: 100px;
+  height: 50px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .links.active {
   height: 100vh;
   opacity: 1;
+}
+
+.container {
+  margin-top: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .createAccount {
   padding: 20px;
   display: flex;
   flex-direction: column;
+  width: 200px;
+  background-color: cadetblue;
+}
+
+.login {
+  display: flex;
+  flex-direction: column;
+  margin-left: 50px;
+}
+
+input {
+  margin-bottom: 10px;
+}
+label {
+  margin-top: 5px;
 }
 
 .hero {
@@ -146,7 +178,7 @@ li.strike {
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  margin: 0 auto;
+  margin-right: 50px;
 }
 
 @media screen and (max-width: 960px) {

@@ -551,6 +551,9 @@ var LISTS = [
   },
 ];
 
+var userExists = false;
+var userFullName = "";
+
 function itemChecked(element, listIndex, itemIndex) {
   $(element).parent().toggleClass("strike");
   let checkedValue = !LISTS[listIndex].listItems[itemIndex].checked;
@@ -621,8 +624,70 @@ function initFirebase() {
       $(".name").html("");
       $(".load").attr("disabled", true);
       userExists = false;
+      userFullName = "";
     }
   });
+}
+
+function login() {
+  let email = $("#log-email").val();
+  let pw = $("#log-pw").val();
+  let fName = $("#fName").val();
+  let lName = $("#lName").val();
+  let fullName = fName + " " + lName;
+
+  firebase
+    .auth()
+    .signInWithEmailAndPassword(email, pw)
+    .then((userCredential) => {
+      // Signed in
+      var user = userCredential.user;
+      console.log("logged in");
+      userFullName = fullName;
+      $(".name").html(email);
+      $("#log-email").val("");
+      $("#log-pw").val("");
+    })
+    .catch((error) => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.log("logged in error" + errorMessage);
+    });
+}
+
+function createAccount() {
+  console.log("create");
+  let fName = $("#fName").val();
+  let lName = $("#lName").val();
+  let email = $("#email").val();
+  let pw = $("#pw").val();
+  let fullName = fName + " " + lName;
+
+  console.log("create" + fName + "fName" + lName);
+
+  firebase
+    .auth()
+    .createUserWithEmailAndPassword(email, pw)
+    .then((userCredential) => {
+      // Signed in
+      var user = userCredential.user;
+      console.log("created");
+      firebase.auth().currentUser.updateProfile({
+        displayName: fullName,
+      });
+      userFullName = fullName;
+      $(".name").html(userFullName);
+      $("#fName").val("");
+      $("#lName").val("");
+      $("#email").val("");
+      $("#pw").val("");
+    })
+    .catch((error) => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.log("create error" + errorMessage);
+      // ..
+    });
 }
 
 function signIn() {
@@ -655,7 +720,6 @@ $(document).ready(function () {
   try {
     let app = firebase.app();
     initFirebase();
-    signIn();
     initListeners();
   } catch (error) {
     console.log("error", error);
