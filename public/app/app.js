@@ -609,6 +609,55 @@ function loadLists() {
 
 function initListeners() {}
 
+function initFirebase() {
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      console.log("auth change logged in");
+      $(".name").html("James");
+      $(".load").prop("disabled", false);
+      userExists = true;
+    } else {
+      console.log("auth change logged out");
+      $(".name").html("");
+      $(".load").attr("disabled", true);
+      userExists = false;
+    }
+  });
+}
+
+function signIn() {
+  firebase
+    .auth()
+    .signInAnonymously()
+    .then(() => {
+      console.log("signed in");
+    })
+    .catch((error) => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.log("Error Signing In" + errorMessage);
+    });
+}
+
+function signOut() {
+  firebase
+    .auth()
+    .signOut()
+    .then(() => {
+      console.log("signed out");
+    })
+    .catch((error) => {
+      console.log("error signing out");
+    });
+}
+
 $(document).ready(function () {
-  initListeners();
+  try {
+    let app = firebase.app();
+    initFirebase();
+    signIn();
+    initListeners();
+  } catch (error) {
+    console.log("error", error);
+  }
 });
